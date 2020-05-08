@@ -1,6 +1,6 @@
 /*
 * Arduino Wireless Communication Tutorial
-*       Example 1 - Receiver Code
+*     Example 1 - Transmitter Code
 *                
 * by Dejan Nedelkovski, www.HowToMechatronics.com
 * 
@@ -12,16 +12,13 @@
 RF24 radio(7, 8); // CE, CSN
 const byte address[6] = "00001";
 void setup() {
-  Serial.begin(9600);
   radio.begin();
-  radio.openReadingPipe(0, address);
+  radio.openWritingPipe(address);
   radio.setPALevel(RF24_PA_MIN);
-  radio.startListening();
+  radio.stopListening();
 }
 void loop() {
-  if (radio.available()) {
-    char text[32] = "";
-    radio.read(&text, sizeof(text));
-    Serial.println(text);
-  }
+  const char text[] = "Hello World";
+  radio.write(&text, sizeof(text));
+  delay(1000);
 }
